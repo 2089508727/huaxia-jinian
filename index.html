@@ -25,6 +25,56 @@
 /* P0-3 移动端 hero 快捷入口：纸色承托，避免压在山水插画上 */
 @media (max-width:720px){.hero-popular{flex-wrap:wrap;row-gap:8px;margin-top:18px;padding:9px 13px;border-radius:4px;border:1px solid rgba(168,63,50,.12);background:rgba(247,243,235,.95);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#5f5749;box-shadow:none}.hero-popular>span{color:#7a705f}}
 </style>
+<style id="map-shell">
+body:has(.jiangshan-embed) .site-header{display:block}
+body:has(.jiangshan-embed) .jiangshan-toolbar{display:none}
+body:has(.jiangshan-embed) .jiangshan-embed{height:calc(100dvh - 88px);grid-template-rows:0 minmax(0,1fr);background:#f7f3eb}
+body:has(.jiangshan-embed) .jiangshan-embed>iframe{grid-row:2;display:block;width:100%;height:100%;border:0;background:#f7f3eb}
+@media (max-width:720px){body:has(.jiangshan-embed) .jiangshan-embed{height:calc(100dvh - 74px)}}
+</style>
+<script id="map-skin">
+(function () {
+  var ATLAS_CSS = [
+    ':root{--bg-parchment:#f7f3eb;--bg-parchment-alt:#f1ece1;--vermilion:#a83f32;--text-main:#2b2118;--text-secondary:#5f5749;--text-muted:#706757;--hairline:rgba(43,33,24,.12)}',
+    '#nav-bar{background:rgba(247,243,235,.96)!important;border-bottom:1px solid #e4ded2!important;padding-left:max(16px,calc((100vw - 1320px)/2))!important}',
+    '#nav-bar .seal-mark{font-family:var(--sans-stack)!important;font-size:11px!important;font-weight:600!important;letter-spacing:.22em!important;color:#8a7757!important}',
+    '#nav-bar .subtitle-mark{color:#5f5749!important}'
+  ].join('');
+  function injectInto(d) {
+    if (!d || !d.head || d.getElementById('huaxia-atlas-skin')) return;
+    var s = d.createElement('style');
+    s.id = 'huaxia-atlas-skin';
+    s.textContent = ATLAS_CSS;
+    d.head.appendChild(s);
+  }
+  function skin(f) {
+    if (!f || f.nodeName !== 'IFRAME') return;
+    if (!f.__huaxiaHooked) {
+      f.__huaxiaHooked = true;
+      f.addEventListener('load', function () { injectInto(f.contentDocument); });
+    }
+    var d = f.contentDocument;
+    if (d && d.querySelector('#nav-bar')) injectInto(d);
+  }
+  function scan() {
+    var fs = document.querySelectorAll('iframe');
+    for (var i = 0; i < fs.length; i++) skin(fs[i]);
+  }
+  var pending = false;
+  function schedule() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function () { pending = false; scan(); });
+  }
+  document.addEventListener('load', function (e) {
+    if (e.target && e.target.nodeName === 'IFRAME') skin(e.target);
+  }, true);
+  window.addEventListener('hashchange', function () { setTimeout(scan, 400); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan);
+  else scan();
+  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </head>
   <body>
     <div id="root"></div>
