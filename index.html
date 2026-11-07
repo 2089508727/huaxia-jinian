@@ -75,6 +75,20 @@ body:has(.jiangshan-embed) .jiangshan-embed>iframe{grid-row:2;display:block;widt
   new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
 })();
 </script>
+<style id="warm-photos">
+/* 器物图统一暖调：在收藏卡媒体层叠一层暖棕，用 multiply 只压蓝、不提黑位 */
+.collection-card .dynasty-art:after{
+  display:block!important;
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  background:#d9c4a0;
+  mix-blend-mode:multiply;
+  opacity:.2;
+  pointer-events:none;
+}
+</style>
 </head>
   <body>
     <div id="root"></div>
