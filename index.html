@@ -44,6 +44,24 @@
 .explore-section{padding-top:64px}
 /* 数字对齐 */
 .date-label,.year-hero-number,.archive-milestone-year,.result-count,.archive-milestone-year small{font-variant-numeric:tabular-nums}
+
+/* 搜索结果密度：单行 100px -> ~72px */
+.search-results>a{padding:14px 12px;gap:18px}
+.search-results h2{font-size:20px;line-height:1.25}
+.search-results p{margin-top:5px;line-height:1.55}
+@media (max-width:900px){.search-results>a{padding:13px 4px;gap:12px}.search-results h2{font-size:18px}.search-results p{margin-top:4px}}
+/* 卡片悬停反馈 */
+@media (hover:hover) and (pointer:fine){
+  .dynasty-card:not(.collection-card){transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .dynasty-card:not(.collection-card):hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(43,33,24,.10)}
+  .person-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .person-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(43,33,24,.09)}
+  .event-card:hover{background:#faf6ee}
+}
+/* 地图首开等待态 */
+.jiangshan-embed:not(.is-ready)::after{content:"江山时序 · 载入中";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:12px/1 var(--serif);letter-spacing:.32em;color:#a08e6f;pointer-events:none;animation:atlas-loading 1.8s ease-in-out infinite}
+@keyframes atlas-loading{0%,100%{opacity:.45}50%{opacity:.95}}
+@media (prefers-reduced-motion:reduce){.jiangshan-embed:not(.is-ready)::after{animation:none;opacity:.7}}
 </style>
 <style id="map-shell">
 body:has(.jiangshan-embed) .site-header{display:block}
