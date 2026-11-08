@@ -20,6 +20,9 @@
 .trail-home-entry>span:nth-of-type(2){color:#5f5749}
 /* P0-4 触控区：图标按钮 34px -> 44px */
 .icon-button{width:44px;height:44px;min-width:44px;min-height:44px}
+/* P0-5 时期标签切换：状态瞬时切换，避免 200ms 颜色过渡造成的闪烁 */
+.period-tabs button{transition:none!important}
+.filter-pills button{transition:none!important}
 /* P0-2 时期标签条：窄屏右侧渐隐 + 滚动吸附（只在会溢出时生效） */
 @media (max-width:900px){.period-tabs{-webkit-mask-image:linear-gradient(to right,#000 88%,rgba(0,0,0,0));mask-image:linear-gradient(to right,#000 88%,rgba(0,0,0,0));scroll-snap-type:x proximity;padding-right:40px}.period-tabs>button{scroll-snap-align:start}}
 /* P0-3 移动端 hero 快捷入口：纸色承托，避免压在山水插画上 */
