@@ -77,6 +77,19 @@
 @media (max-width:900px){.tl-century{top:74px;font-size:12px;margin-left:-26px;padding-left:26px}.events-list{padding-left:26px}.events-list::before{left:8px}.event-card::before{left:-21px;top:40px}}
 @media (max-width:600px){.event-card{flex-direction:column;gap:6px;padding:24px 4px}.event-big-year{width:auto;font-size:28px}.event-card::before{top:30px}}
 @media (prefers-reduced-motion:no-preference){.event-big-year{transition:color .15s ease}}
+
+/* 世纪快速跳转（宽屏） */
+.tl-century{scroll-margin-top:132px}
+.tl-jump{display:none}
+@media (min-width:1360px){
+  .tl-jump{display:flex;flex-direction:column;gap:1px;position:fixed;left:max(12px,calc((100vw - 1240px)/2 - 58px));top:50%;transform:translateY(-50%);max-height:72vh;overflow-y:auto;overflow-x:hidden;z-index:6;padding:6px 4px;opacity:0;pointer-events:none;transition:opacity .2s ease;scrollbar-width:none}
+  .tl-jump::-webkit-scrollbar{display:none}
+  .tl-jump.is-visible{opacity:1;pointer-events:auto}
+  .tl-jump button{appearance:none;border:0;background:transparent;color:#9a8d78;font:11px/1.4 var(--font-mono,ui-monospace,monospace);letter-spacing:.02em;padding:3px 6px;border-radius:3px;cursor:pointer;text-align:left;transition:color .15s,background .15s}
+  .tl-jump button:hover{color:#a83f32;background:#f1e9dc}
+  .tl-jump button.active{color:#a83f32;font-weight:700;background:#f4ece0}
+}
+@media (max-width:900px){.tl-century{scroll-margin-top:118px}}
 </style>
 <style id="map-shell">
 body:has(.jiangshan-embed) .site-header{display:block}
@@ -152,7 +165,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
 (function () {
   function parseYear(text) {
     if (!text) return null;
-    var m = text.match(/(前)?\s*(-?\d{1,4})/);
+    var m = text.match(/(\u524d)?\s*(-?\d{1,4})/);
     if (!m) return null;
     var n = parseInt(m[2], 10);
     if (!isFinite(n) || n === 0) return null;
@@ -161,7 +174,19 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   }
   function centuryOf(y) {
     var c = Math.ceil(Math.abs(y) / 100);
-    return (y < 0 ? '前' : '') + c + '世纪';
+    return (y < 0 ? '\u524d' : '') + c + '\u4e16\u7eaa';
+  }
+  function ensureNav(list) {
+    var nav = document.querySelector('.tl-jump');
+    if (!nav) {
+      nav = document.createElement('nav');
+      nav.className = 'tl-jump';
+      nav.setAttribute('aria-label', '\u4e16\u7eaa\u5feb\u901f\u8df3\u8f6c');
+    }
+    if (nav.parentElement !== list.parentElement) {
+      list.parentElement.insertBefore(nav, list);
+    }
+    return nav;
   }
   function build() {
     var lists = document.querySelectorAll('.events-list');
@@ -170,6 +195,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
       var olds = list.querySelectorAll('.tl-century');
       for (var k = 0; k < olds.length; k++) olds[k].remove();
       var cards = list.querySelectorAll('.event-card');
+      var headers = [];
       var last = null;
       for (var j = 0; j < cards.length; j++) {
         var card = cards[j];
@@ -184,9 +210,43 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
           h.className = 'tl-century';
           h.textContent = century;
           list.insertBefore(h, card);
+          headers.push(h);
           last = century;
         }
       }
+      var nav = ensureNav(list);
+      nav.innerHTML = '';
+      headers.forEach(function (h) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = h.textContent.replace('\u4e16\u7eaa', '');
+        b.setAttribute('data-target', h.textContent);
+        b.addEventListener('click', function () {
+          var anchor = h.nextElementSibling || h;
+          var y = anchor.getBoundingClientRect().top + window.scrollY - 148;
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          window.scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
+        });
+        nav.appendChild(b);
+      });
+      syncActive();
+    }
+  }
+  function syncActive() {
+    var nav = document.querySelector('.tl-jump');
+    var list = document.querySelector('.events-list');
+    if (!nav || !list) return;
+    var r = list.getBoundingClientRect();
+    nav.classList.toggle('is-visible', r.top < window.innerHeight * 0.9 && r.bottom > 120);
+    var headers = list.querySelectorAll('.tl-century');
+    var current = null;
+    for (var i = 0; i < headers.length; i++) {
+      if (headers[i].getBoundingClientRect().top <= 160) current = headers[i].textContent;
+      else break;
+    }
+    var btns = nav.querySelectorAll('button');
+    for (var j = 0; j < btns.length; j++) {
+      btns[j].classList.toggle('active', btns[j].getAttribute('data-target') === current);
     }
   }
   var timer = null;
@@ -194,6 +254,12 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (timer) clearTimeout(timer);
     timer = setTimeout(build, 160);
   }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { ticking = false; syncActive(); });
+  }, { passive: true });
   document.addEventListener('click', function (e) {
     var yEl = e.target.closest && e.target.closest('.event-big-year');
     if (!yEl) return;
@@ -207,6 +273,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   if (document.readyState !== 'loading') build();
   new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
   window.addEventListener('hashchange', schedule);
+  window.addEventListener('resize', syncActive);
 })();
 </script>
 </head>
