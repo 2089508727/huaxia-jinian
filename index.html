@@ -143,60 +143,50 @@
 .relation-list .rl-item.is-hot b,.relation-list .rl-item:hover b{color:#a83f32}
 .relation-caption{color:#8a7f6d;font-size:11.5px;margin-top:8px}
 
-/* 人物关系组件 v4 */
-.rel-block{margin:8px 0 40px;border-top:1px solid #e4ded2;padding-top:26px}
-.rel-head{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
-.rel-head h2{font-family:var(--serif);font-size:24px;font-weight:500;color:#2b2118;margin:0;padding-left:14px;border-left:3px solid #a83f32;line-height:1.2}
-.rel-head p{margin:0;color:#8a7f6d;font-size:13px}
-.rel-body{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:34px;align-items:start}
-.rel-graph{min-width:0}
-.rel-svg{display:block;width:100%;max-width:620px;height:auto;margin:0 auto}
+/* 人物关系（右栏卡片） */
+.rel-card h3{margin-bottom:2px}
+.rel-svg{display:block;width:100%;height:auto;margin:2px 0 0}
 .rel-ring{fill:none;stroke:#ece3d2;stroke-dasharray:3 7}
-.rnode{cursor:pointer;transition:opacity .25s ease;outline:none}
-.rnode .rn-ring{fill:#fcfaf5;stroke:#ded3c1;stroke-width:1.2;transition:fill .2s,stroke .2s}
-.rnode .rn-dot{fill:none;stroke-width:1.6;opacity:.9;transition:stroke-width .2s,opacity .2s}
-.rnode .rn-name{font-family:var(--serif);font-size:12.5px;fill:#3a3128;letter-spacing:.02em}
-.rnode .rn-type{font-size:9.5px;letter-spacing:.04em}
+.rnode{cursor:pointer;transition:opacity .22s ease;outline:none}
+.rnode .rn-ring{fill:#fcfaf5;stroke:#ded3c1;stroke-width:1.1;transition:fill .2s,stroke .2s}
+.rnode .rn-dot{fill:none;stroke-width:1.4;transition:stroke-width .2s,opacity .2s}
+.rnode .rn-name{font-family:var(--serif);fill:#3a3128;letter-spacing:.01em}
+.rnode .rn-type{font-family:var(--serif);letter-spacing:.04em}
 .rnode:hover .rn-ring,.rnode:focus-visible .rn-ring{fill:#f6eddd;stroke:#c9a06a}
-.rnode.is-active .rn-ring{fill:#f4ece0;stroke:#a83f32;stroke-width:2}
-.rnode.is-active .rn-dot{stroke-width:2.6;opacity:1}
+.rnode.is-active .rn-ring{fill:#f4ece0;stroke:#a83f32;stroke-width:1.8}
+.rnode.is-active .rn-dot{stroke-width:2.2}
 .rnode.is-dim{opacity:.32}
 .rnode.is-center{cursor:default}
 .rnode .rn-halo{fill:none;stroke:#efe4d2;stroke-width:1}
-.rnode .rn-center{fill:#f7f3eb;stroke:#a83f32;stroke-width:2}
-.rnode .rn-center-ch{font-family:var(--serif);font-size:26px;fill:#2b2118}
-.rnode .rn-center-name{font-family:var(--serif);font-size:16px;fill:#2b2118;letter-spacing:.04em;paint-order:stroke;stroke:#f7f3eb;stroke-width:5;stroke-linejoin:round}
-.redge{stroke-opacity:.72;transition:opacity .25s ease,stroke-width .25s ease}
-.redge.is-hot{stroke-opacity:1;stroke-width:3.2}
-.redge.is-dim{opacity:.16}
-.redge-label{font-family:var(--serif);font-size:10.5px;letter-spacing:.04em;paint-order:stroke;stroke:#f7f3eb;stroke-width:4;stroke-linejoin:round;transition:opacity .25s ease}
-.redge-label.is-hot{font-size:11.5px}
-.redge-label.is-dim{opacity:.15}
-.rel-legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:10px;color:#8a7f6d;font-size:12px}
-.rel-lg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
-.rel-panel{background:#fcfaf5;border:1px solid #e9e1d3;border-radius:4px;padding:24px 24px 20px;opacity:0;transform:translateY(8px);transition:opacity .28s ease,transform .28s ease;min-height:260px}
+.rnode .rn-center{fill:#f7f3eb;stroke:#a83f32;stroke-width:1.6}
+.rnode .rn-center-ch{font-family:var(--serif);fill:#2b2118}
+.rnode .rn-center-name{font-family:var(--serif);fill:#2b2118;letter-spacing:.02em}
+.redge{stroke-opacity:.7;transition:opacity .22s ease,stroke-width .22s ease}
+.redge.is-hot{stroke-opacity:1;stroke-width:2.6}
+.redge.is-dim{opacity:.18}
+.redge-label{font-family:var(--serif);letter-spacing:.03em;paint-order:stroke;stroke:#f7f3eb;stroke-width:3.5;stroke-linejoin:round;transition:opacity .22s ease}
+.redge-label.is-dim{opacity:.16}
+.rel-legend{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 2px;color:#8a7f6d;font-size:11px}
+.rel-lg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.rel-panel{border-top:1px solid #e9e1d3;margin-top:10px;padding-top:12px;opacity:0;transform:translateY(6px);transition:opacity .26s ease,transform .26s ease}
 .rel-panel.is-in{opacity:1;transform:none}
-.rp-eyebrow{font-size:11px;letter-spacing:.18em;color:#a88a59;margin-bottom:8px}
-.rel-panel h3{font-family:var(--serif);font-size:26px;font-weight:500;color:#2b2118;margin:0 0 6px;line-height:1.25}
-.rp-meta{color:#8a7f6d;font-size:13px;margin-bottom:14px}
-.rp-rel{border-left:2px solid #d9cdb8;padding:6px 0 6px 12px;margin-bottom:14px;font-size:13px;color:#5f5343;display:flex;flex-direction:column;gap:3px}
-.rp-rel span{font-size:11px;letter-spacing:.12em;color:#a88a59}
-.rp-rel b{font-family:var(--serif);font-size:15px;color:#a83f32;font-weight:600}
-.rp-rel em{font-style:normal;color:#6b6153;font-size:12.5px;line-height:1.7}
-.rp-summary{color:#5f5343;font-size:14px;line-height:1.95;margin:0 0 16px}
-.rel-panel h4{font-family:var(--serif);font-size:14px;color:#2b2118;margin:18px 0 8px;padding-left:10px;border-left:2px solid #d9cdb8;letter-spacing:.04em}
-.rp-exp,.rp-events{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
-.rp-exp li,.rp-events li{font-size:13px;color:#5f5343;line-height:1.7}
-.rp-exp li span,.rp-events li span{display:inline-block;min-width:58px;color:#8a7f6d;font-family:var(--serif)}
+.rp-eyebrow{font-size:10px;letter-spacing:.16em;color:#a88a59;margin-bottom:6px}
+.rel-panel h3{font-family:var(--serif);font-size:18px;font-weight:500;color:#2b2118;margin:0 0 4px;line-height:1.3}
+.rp-meta{color:#8a7f6d;font-size:11.5px;margin-bottom:10px}
+.rp-rel{border-left:2px solid #d9cdb8;padding:4px 0 4px 9px;margin-bottom:10px;font-size:11.5px;color:#5f5343;display:flex;flex-direction:column;gap:2px}
+.rp-rel span{font-size:10px;letter-spacing:.1em;color:#a88a59}
+.rp-rel b{font-family:var(--serif);font-size:13px;color:#a83f32;font-weight:600}
+.rp-rel em{font-style:normal;color:#6b6153;font-size:11.5px;line-height:1.65}
+.rp-summary{color:#5f5343;font-size:12.5px;line-height:1.85;margin:0 0 10px}
+.rel-panel h4{font-family:var(--serif);font-size:12px;color:#2b2118;margin:12px 0 5px;padding-left:8px;border-left:2px solid #d9cdb8;letter-spacing:.04em}
+.rp-exp,.rp-events{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px}
+.rp-exp li,.rp-events li{font-size:11.5px;color:#5f5343;line-height:1.7}
+.rp-exp li span,.rp-events li span{display:inline-block;min-width:42px;color:#8a7f6d;font-family:var(--serif);margin-right:4px}
 .rp-events a{color:#5f5343;text-decoration:none;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
 .rp-events a:hover{color:#a83f32;border-bottom-color:#a83f32}
-.rp-link{display:inline-block;margin-top:18px;font-size:13px;color:#a83f32;text-decoration:none}
-.rp-link:hover{text-decoration:underline;text-underline-offset:4px}
-@media (max-width:1000px){
-  .rel-body{grid-template-columns:1fr;gap:22px}
-  .rel-svg{max-width:520px}
-  .rel-panel{min-height:0}
-}
+.rp-link{display:inline-block;margin-top:12px;font-size:11.5px;color:#a83f32;text-decoration:none}
+.rp-link:hover{text-decoration:underline;text-underline-offset:3px}
+.rel-empty{color:#8a7f6d;font-size:12.5px;line-height:1.9}
 </style>
 <style id="map-shell">
 body:has(.jiangshan-embed) .site-header{display:block}
@@ -382,13 +372,13 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
 <script id="relation-graph">
 (function () {
   var TYPE = {
-    "君臣": { c: "#6f5537", dash: "", w: 1.7 },
-    "师友": { c: "#a88a59", dash: "", w: 1.7 },
-    "同僚": { c: "#8a8f9a", dash: "5 4", w: 1.5 },
-    "家族": { c: "#6f8a63", dash: "", w: 1.7 },
-    "传承": { c: "#8a6f9a", dash: "7 5", w: 1.5 },
-    "对手": { c: "#a83f32", dash: "6 4", w: 1.7 },
-    "":     { c: "#bfb3a0", dash: "3 4", w: 1.4 }
+    "君臣": { c: "#6f5537", dash: "", w: 1.6 },
+    "师友": { c: "#a88a59", dash: "", w: 1.6 },
+    "同僚": { c: "#8a8f9a", dash: "4 3", w: 1.4 },
+    "家族": { c: "#6f8a63", dash: "", w: 1.6 },
+    "传承": { c: "#8a6f9a", dash: "6 4", w: 1.4 },
+    "对手": { c: "#a83f32", dash: "5 4", w: 1.6 },
+    "":     { c: "#bfb3a0", dash: "3 4", w: 1.3 }
   };
 
   function st(t) { return TYPE[t] || TYPE[""]; }
@@ -410,66 +400,58 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     return [n.slice(0, mid), n.slice(mid)];
   }
 
-  function view(narrow) {
-    return narrow
-      ? { W: 380, H: 392, cx: 190, cy: 186, R: 116, nodeR: 26, name: 11.5, type: 8.5, cR: 36, cChar: 20, cName: 11 }
-      : { W: 620, H: 452, cx: 310, cy: 204, R: 150, nodeR: 32, name: 12.5, type: 9.5, cR: 46, cChar: 26, cName: 12 };
-  }
+  var G = { W: 240, H: 268, cx: 120, cy: 122, R: 78, nodeR: 19, name: 10.5, type: 7.8, cR: 26, cChar: 15, cName: 9 };
 
-  function nodeMarkup(r, pos, i, g) {
+  function nodeMarkup(r, pos, i) {
     var name = r.name || "";
     var lines = splitName(name);
     var txt = "";
     if (lines.length > 1) {
-      txt += '<text class="rn-name" y="-2" text-anchor="middle" font-size="' + (g.name - 1) + '">' + esc(lines[0]) + "</text>";
-      txt += '<text class="rn-name" y="' + (g.name + 3) + '" text-anchor="middle" font-size="' + (g.name - 1) + '">' + esc(lines[1]) + "</text>";
+      txt += '<text class="rn-name" y="-2" text-anchor="middle" font-size="' + (G.name - 0.5) + '">' + esc(lines[0]) + "</text>";
+      txt += '<text class="rn-name" y="' + (G.name + 2) + '" text-anchor="middle" font-size="' + (G.name - 0.5) + '">' + esc(lines[1]) + "</text>";
     } else {
-      txt += '<text class="rn-name" y="4" text-anchor="middle" font-size="' + g.name + '">' + esc(name) + "</text>";
+      txt += '<text class="rn-name" y="3.5" text-anchor="middle" font-size="' + G.name + '">' + esc(name) + "</text>";
     }
-    var off = g.nodeR + 12;
-    var tx = Math.cos(pos.a) * off, ty = Math.sin(pos.a) * off + 3;
     return '<g class="rnode" data-id="' + r.id + '" data-i="' + i + '" transform="translate(' + pos.x.toFixed(1) + "," + pos.y.toFixed(1) + ')">'
-      + '<circle class="rn-ring" r="' + g.nodeR + '"></circle>'
-      + '<circle class="rn-dot" r="' + g.nodeR + '" stroke="' + st(r.type).c + '"></circle>'
+      + '<circle class="rn-ring" r="' + G.nodeR + '"></circle>'
+      + '<circle class="rn-dot" r="' + G.nodeR + '" stroke="' + st(r.type).c + '"></circle>'
       + txt
-      + '<text class="rn-type" x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="middle" font-size="' + g.type + '" fill="' + st(r.type).c + '">' + esc(r.type || "相关") + "</text>"
       + "</g>";
   }
 
-  function graphSvg(rels, center, narrow) {
-    var g = view(narrow);
+  function graphSvg(rels, center) {
     var n = rels.length;
-    var R = n > 6 ? g.R + 8 : g.R;
+    var R = n > 6 ? G.R - 6 : G.R;
     var pos = rels.map(function (r, i) {
       var a = -Math.PI / 2 + i * (2 * Math.PI / n);
-      return { r: r, x: g.cx + R * Math.cos(a), y: g.cy + R * Math.sin(a), a: a };
+      return { r: r, x: G.cx + R * Math.cos(a), y: G.cy + R * Math.sin(a), a: a };
     });
 
-    var out = '<svg class="rel-svg" viewBox="0 0 ' + g.W + " " + g.H + '" role="img" aria-label="' + esc(center.name) + '的人物关系图">';
-    out += '<circle class="rel-ring" cx="' + g.cx + '" cy="' + g.cy + '" r="' + (R + g.cR + 14) + '"></circle>';
+    var out = '<svg class="rel-svg" viewBox="0 0 ' + G.W + " " + G.H + '" role="img" aria-label="' + esc(center.name) + '的人物关系图">';
+    out += '<circle class="rel-ring" cx="' + G.cx + '" cy="' + G.cy + '" r="' + (R + G.cR + 12) + '"></circle>';
 
     pos.forEach(function (p, i) {
       var s = st(p.r.type);
       var dx = Math.cos(p.a), dy = Math.sin(p.a);
-      var x1 = g.cx + dx * (g.cR + 4), y1 = g.cy + dy * (g.cR + 4);
-      var x2 = p.x - dx * (g.nodeR + 2), y2 = p.y - dy * (g.nodeR + 2);
+      var x1 = G.cx + dx * (G.cR + 3), y1 = G.cy + dy * (G.cR + 3);
+      var x2 = p.x - dx * (G.nodeR + 2), y2 = p.y - dy * (G.nodeR + 2);
       out += '<line class="redge" data-i="' + i + '" x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) +
         '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + s.c + '" stroke-width="' + s.w + '"' +
         (s.dash ? ' stroke-dasharray="' + s.dash + '"' : "") + "></line>";
-      var mx = x1 + (x2 - x1) * 0.43 + dy * 9;
-      var my = y1 + (y2 - y1) * 0.43 - dx * 9;
-      out += '<text class="redge-label" x="' + mx.toFixed(1) + '" y="' + my.toFixed(1) + '" text-anchor="middle" font-size="' + g.type + 1 + '" fill="' + s.c + '">' +
+      var mx = x1 + (x2 - x1) * 0.45 + dy * 8;
+      var my = y1 + (y2 - y1) * 0.45 - dx * 8;
+      out += '<text class="redge-label" x="' + mx.toFixed(1) + '" y="' + my.toFixed(1) + '" text-anchor="middle" font-size="' + (G.type + 0.5) + '" fill="' + s.c + '">' +
         esc(p.r.type || "相关") + "</text>";
     });
 
-    out += '<g class="rnode is-center" data-id="' + esc(center.id) + '" transform="translate(' + g.cx + "," + g.cy + ')">'
-      + '<circle class="rn-halo" r="' + (g.cR + 8) + '"></circle>'
-      + '<circle class="rn-center" r="' + g.cR + '"></circle>'
-      + '<text class="rn-center-ch" y="-2" text-anchor="middle" font-size="' + g.cChar + '">' + esc((center.name || "").slice(0, 1)) + "</text>"
-      + '<text class="rn-center-name" y="' + (g.cR - 14) + '" text-anchor="middle" font-size="' + g.cName + '">' + esc(center.name || "") + "</text>"
+    out += '<g class="rnode is-center" data-id="' + esc(center.id) + '" transform="translate(' + G.cx + "," + G.cy + ')">'
+      + '<circle class="rn-halo" r="' + (G.cR + 6) + '"></circle>'
+      + '<circle class="rn-center" r="' + G.cR + '"></circle>'
+      + '<text class="rn-center-ch" y="-3" text-anchor="middle" font-size="' + G.cChar + '">' + esc((center.name || "").slice(0, 1)) + "</text>"
+      + '<text class="rn-center-name" y="' + (G.cR - 11) + '" text-anchor="middle" font-size="' + G.cName + '">' + esc(center.name || "") + "</text>"
       + "</g>";
 
-    pos.forEach(function (p, i) { out += nodeMarkup(p.r, p, i, g); });
+    pos.forEach(function (p, i) { out += nodeMarkup(p.r, p, i); });
     return out + "</svg>";
   }
 
@@ -493,12 +475,12 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (p.summary) h += '<p class="rp-summary">' + esc(p.summary) + "</p>";
     if (p.exp && p.exp.length) {
       h += '<h4>主要事迹</h4><ul class="rp-exp">' + p.exp.map(function (e) {
-        return "<li><span>" + esc(e[0]) + "年</span>" + esc(e[1]) + "</li>";
+        return "<li><span>" + esc(e[0]) + "</span>" + esc(e[1]) + "</li>";
       }).join("") + "</ul>";
     }
     if (p.events && p.events.length) {
       h += '<h4>相关事件</h4><ul class="rp-events">' + p.events.map(function (e) {
-        return '<li><a href="#/events/' + e[2] + '"><span>' + esc(e[0]) + "年</span>" + esc(e[1]) + "</a></li>";
+        return '<li><a href="#/events/' + e[2] + '"><span>' + esc(e[0]) + "</span>" + esc(e[1]) + "</a></li>";
       }).join("") + "</ul>";
     }
     h += '<a class="rp-link" href="#/people/' + p.id + '">查看完整人物页 →</a>';
@@ -507,63 +489,41 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
 
   function build() {
     var pid = currentId();
-    var existing = document.querySelector(".rel-block");
-    var narrowNow = window.innerWidth <= 900 ? "1" : "0";
+    var card = document.querySelector(".aside-card.relation-placeholder");
+    if (!card) return;
+    if (card.getAttribute("data-hash") === (location.hash || "")) return;
 
-    if (existing && existing.getAttribute("data-hash") === (location.hash || "") &&
-        existing.getAttribute("data-narrow") === narrowNow) return;
-    if (existing) existing.remove();
-
-    var page = document.querySelector(".reading-page");
-    if (page) {
-      page.style.gridTemplateColumns = "";
-      var as0 = page.querySelector("aside");
-      if (as0) as0.style.display = "";
-    }
-    if (!pid) return;
+    var oldList = [].slice.call(document.querySelectorAll("aside .aside-card")).filter(function (c) {
+      return /相关人物/.test(c.innerText);
+    })[0] || null;
 
     var d = data();
-    if (!d || !d.rels || !d.rels[pid]) return;
-
-    var people = d.people || {};
-    var rels = d.rels[pid].map(function (r) {
-      var p = people[r.id] || {};
-      return { id: r.id, type: r.type, note: r.note, name: p.name || "" };
-    });
-    var me = people[pid];
-    if (!me || !rels.length) return;
-
-    var narrow = window.innerWidth <= 900;
-    if (page) {
-      page.style.gridTemplateColumns = "minmax(0,1fr)";
-      var aside = page.querySelector("aside");
-      if (aside) aside.style.display = "none";
+    var rels = [], people = {}, me = null;
+    if (pid && d && d.rels && d.rels[pid]) {
+      people = d.people || {};
+      me = people[pid];
+      rels = d.rels[pid].map(function (r) {
+        var p = people[r.id] || {};
+        return { id: r.id, type: r.type, note: r.note, name: p.name || "" };
+      });
     }
 
-    var primary = document.querySelector(".reading-primary");
-    if (!primary) return;
+    if (!me || !rels.length) {
+      card.className = "aside-card rel-card is-empty";
+      card.setAttribute("data-hash", location.hash || "");
+      card.innerHTML = "<h3>人物关系</h3><p class=\"rel-empty\">关联资料尚在补充。人物的交往、师承与对立关系会在这里展开。</p>";
+      if (oldList && oldList !== card) oldList.style.display = "none";
+      return;
+    }
+    if (oldList && oldList !== card) oldList.style.display = "none";
 
-    var section = document.createElement("section");
-    section.className = "rel-block";
-    section.setAttribute("data-hash", location.hash || "");
-    section.setAttribute("data-narrow", narrow ? "1" : "0");
-    section.innerHTML =
-      '<div class="rel-head"><h2>人物关系</h2><p>点击节点查看该人物的身份、事迹与相关事件</p></div>' +
-      '<div class="rel-body">' +
-        '<div class="rel-graph">' + graphSvg(rels, me, narrow) + legend(rels) + "</div>" +
-        '<div class="rel-panel" aria-live="polite"></div>' +
-      "</div>";
+    card.className = "aside-card rel-card";
+    card.setAttribute("data-hash", location.hash || "");
+    card.innerHTML = "<h3>人物关系</h3>" + graphSvg(rels, me) + legend(rels) +
+      '<div class="rel-panel" aria-live="polite"></div>';
 
-    var anchor = null;
-    [].forEach.call(primary.children, function (ch) {
-      var h2 = ch.querySelector && ch.querySelector("h2");
-      if (h2 && h2.textContent.trim() === "生平纪年") anchor = ch;
-    });
-    if (anchor) primary.insertBefore(section, anchor);
-    else primary.appendChild(section);
-
-    var panel = section.querySelector(".rel-panel");
-    var svg = section.querySelector(".rel-svg");
+    var panel = card.querySelector(".rel-panel");
+    var svg = card.querySelector(".rel-svg");
     var nodes = [].slice.call(svg.querySelectorAll(".rnode:not(.is-center)"));
     var edges = [].slice.call(svg.querySelectorAll(".redge"));
     var labels = [].slice.call(svg.querySelectorAll(".redge-label"));
@@ -582,9 +542,9 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     }
     function select(i) {
       if (selected === i) { showCenter(); return; }
-      selected = i;
       var r = rels[i], p = people[r.id];
       if (!p) return;
+      selected = i;
       nodes.forEach(function (n) {
         var hit = Number(n.getAttribute("data-i")) === i;
         n.classList.toggle("is-active", hit);
@@ -618,18 +578,17 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   var timer = null;
   function schedule() {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(build, 200);
+    timer = setTimeout(build, 180);
   }
   var mo = new MutationObserver(function (muts) {
     var outside = muts.some(function (m) {
       var t = m.target;
-      return !(t && t.closest && t.closest(".rel-block"));
+      return !(t && t.closest && t.closest(".rel-card"));
     });
     if (outside) schedule();
   });
   mo.observe(document.documentElement, { childList: true, subtree: true });
   window.addEventListener("hashchange", function () { setTimeout(build, 320); });
-  window.addEventListener("resize", schedule);
   if (document.readyState !== "loading") build();
 })();
 
