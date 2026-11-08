@@ -122,6 +122,26 @@
 .relation-list .rl-item b{font-family:var(--serif);font-size:14px;color:#2b2118;font-weight:500}
 .relation-list .rl-item small{color:#8a7f6d;font-size:12px;text-align:right}
 .relation-list .rl-item:hover b{color:#a83f32}
+
+/* 人物关系图 v3：图 + 清单合一 */
+.relation-graph h3{margin-bottom:2px}
+.relation-svg{display:block;width:100%;height:auto;margin:4px 0 0}
+.relation-svg .rg-edge{stroke-opacity:.55;transition:stroke-opacity .15s,stroke-width .15s}
+.relation-svg .rg-edge.is-hot{stroke-opacity:1;stroke-width:2.6}
+.relation-svg .rg-node circle{fill:#fcfaf5;stroke-width:1.4;transition:fill .15s,stroke-width .15s}
+.relation-svg .rg-node.is-hot circle{fill:#f4ece0;stroke-width:2.4}
+.relation-svg .rg-ch{font-family:var(--serif);font-size:12px;fill:#3a3128}
+.relation-svg .rg-name{font-family:var(--serif);font-size:11.5px;fill:#5f5343}
+.relation-svg .rg-type{font-size:9.5px;letter-spacing:.04em}
+.relation-svg .rg-center{fill:#f7f3eb;stroke:#a83f32;stroke-width:1.5}
+.relation-svg .rg-center-text{fill:#2b2118;font-family:var(--serif);font-size:15px}
+.relation-list{display:flex;flex-direction:column;gap:9px;margin-top:10px;border-top:1px solid #e9e1d3;padding-top:10px}
+.relation-list .rl-type{display:block;font-size:10.5px;letter-spacing:.14em;margin-bottom:2px}
+.relation-list .rl-item{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:4px 0;text-decoration:none;border-radius:3px}
+.relation-list .rl-item b{font-family:var(--serif);font-size:13.5px;color:#2b2118;font-weight:500}
+.relation-list .rl-item small{color:#8a7f6d;font-size:11.5px;text-align:right;line-height:1.5}
+.relation-list .rl-item.is-hot b,.relation-list .rl-item:hover b{color:#a83f32}
+.relation-caption{color:#8a7f6d;font-size:11.5px;margin-top:8px}
 </style>
 <style id="map-shell">
 body:has(.jiangshan-embed) .site-header{display:block}
@@ -306,9 +326,18 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
 </script>
 <script id="relation-graph">
 (function () {
-  var COLOR = { "君臣": "#2b2118", "师友": "#a88a59", "同僚": "#8a8f9a", "家族": "#6f8a63", "传承": "#6b6153", "对手": "#a83f32", "": "#c2b6a2" };
+  var STYLE = {
+    "君臣": { c: "#2b2118", dash: "", w: 1.6 },
+    "师友": { c: "#a88a59", dash: "", w: 1.6 },
+    "同僚": { c: "#8a8f9a", dash: "2 3", w: 1.4 },
+    "家族": { c: "#6f8a63", dash: "", w: 1.6 },
+    "传承": { c: "#6b6153", dash: "6 3", w: 1.4 },
+    "对手": { c: "#a83f32", dash: "5 4", w: 1.6 },
+    "":     { c: "#c2b6a2", dash: "2 3", w: 1.2 }
+  };
   var ORDER = ["君臣", "师友", "同僚", "家族", "传承", "对手"];
 
+  function st(t) { return STYLE[t] || STYLE[""]; }
   function esc(t) {
     return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
@@ -330,10 +359,26 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     return { g: g, order: order };
   }
 
-  function renderGraph(rels, centerName) {
-    var W = 262, H = 244, cx = 131, cy = 108, R = 74;
+  function rowsHtml(rels) {
     var info = group(rels);
-    var total = rels.length, gap = 0.22;
+    var html = '<div class="relation-list">';
+    var idx = 0;
+    info.order.forEach(function (t) {
+      html += '<div class="rl-group"><span class="rl-type" style="color:' + st(t).c + '">' + (t || "相关") + "</span>";
+      info.g[t].forEach(function (r) {
+        html += '<a class="rl-item" data-i="' + idx + '" href="#/people/' + r.id + '"><b>' + esc(r.name) + "</b><small>" +
+          esc(r.note || r.role || "") + "</small></a>";
+        idx += 1;
+      });
+      html += "</div>";
+    });
+    return html + "</div>";
+  }
+
+  function graphHtml(rels, centerName) {
+    var W = 262, H = 262, cx = 131, cy = 106, R = 72;
+    var info = group(rels);
+    var total = rels.length, gap = 0.26;
     var span = (Math.PI * 2 - gap * Math.max(info.order.length - 1, 0)) / total;
     var ang = -Math.PI / 2, pos = [];
     info.order.forEach(function (t) {
@@ -344,72 +389,50 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     var out = '<svg class="relation-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="人物关系图">';
     pos.forEach(function (p, i) {
       var x = cx + R * Math.cos(p.a), y = cy + R * Math.sin(p.a);
-      out += '<line class="rg-edge" data-i="' + i + '" x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '" stroke="' + COLOR[p.r.type || ""] + '"/>';
+      var s = st(p.r.type);
+      out += '<line class="rg-edge" data-i="' + i + '" x1="' + cx + '" y1="' + cy + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) +
+        '" stroke="' + s.c + '" stroke-width="' + s.w + '"' + (s.dash ? ' stroke-dasharray="' + s.dash + '"' : "") + '></line>';
     });
     pos.forEach(function (p, i) {
       var x = cx + R * Math.cos(p.a), y = cy + R * Math.sin(p.a);
+      var s = st(p.r.type);
       var name = p.r.name || "";
       var tip = name + " · " + (p.r.type || "相关") + (p.r.note ? " · " + p.r.note : "");
       out += '<a class="rg-link" href="#/people/' + p.r.id + '" data-i="' + i + '" data-tip="' + esc(tip) + '">'
         + '<g class="rg-node" transform="translate(' + x.toFixed(1) + "," + y.toFixed(1) + ')">'
-        + '<circle r="15" stroke="' + COLOR[p.r.type || ""] + '"></circle>'
+        + '<circle r="16" stroke="' + s.c + '"></circle>'
         + '<text class="rg-ch" y="4" text-anchor="middle">' + esc(name.slice(0, 1)) + "</text>"
-        + '<text class="rg-name" y="27" text-anchor="middle">' + esc(name) + "</text>"
+        + '<text class="rg-type" y="31" text-anchor="middle" fill="' + s.c + '">' + esc(p.r.type || "相关") + "</text>"
         + "</g></a>";
     });
     out += '<circle class="rg-center" cx="' + cx + '" cy="' + cy + '" r="18"></circle>';
     out += '<text class="rg-center-text" x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle">' + esc((centerName || "").slice(0, 1)) + "</text>";
-    out += "</svg>";
-
-    var legend = info.order.filter(Boolean);
-    var legendHtml = legend.length
-      ? '<div class="relation-legend">' + legend.map(function (t) {
-          return '<span><i style="background:' + COLOR[t] + '"></i>' + t + "</span>";
-        }).join("") + "</div>"
-      : "";
-
-    return "<h3>人物关系图</h3>" + out + legendHtml +
-      '<p class="relation-caption">悬停查看关系 · 点击节点跳转</p>';
-  }
-
-  function renderList(rels) {
-    var info = group(rels);
-    var html = '<h3>人物关系图</h3><div class="relation-list">';
-    info.order.forEach(function (t) {
-      html += '<div class="rl-group"><span class="rl-type" style="color:' + COLOR[t] + '">' + (t || "相关") + "</span>";
-      info.g[t].forEach(function (r) {
-        html += '<a class="rl-item" href="#/people/' + r.id + '"><b>' + esc(r.name) + "</b><small>" +
-          esc(r.note || r.role || "") + "</small></a>";
-      });
-      html += "</div>";
-    });
-    return html + "</div>";
+    return out + "</svg>";
   }
 
   function wire(card) {
     var svg = card.querySelector(".relation-svg");
+    if (!svg) return;
+    var rows = [].slice.call(card.querySelectorAll(".rl-item"));
+    var nodes = [].slice.call(svg.querySelectorAll(".rg-node"));
+    var edges = [].slice.call(svg.querySelectorAll(".rg-edge"));
     var cap = card.querySelector(".relation-caption");
-    if (!svg || !cap) return;
-    var base = cap.textContent;
+    var base = cap ? cap.textContent : "";
     function hot(i) {
-      [].forEach.call(svg.querySelectorAll(".rg-edge"), function (l) {
-        l.classList.toggle("is-hot", l.getAttribute("data-i") === i);
-      });
-      [].forEach.call(svg.querySelectorAll(".rg-node"), function (g) {
-        g.classList.toggle("is-hot", g.parentNode.getAttribute("data-i") === i);
-      });
+      edges.forEach(function (l) { l.classList.toggle("is-hot", l.getAttribute("data-i") === i); });
+      nodes.forEach(function (g) { g.classList.toggle("is-hot", g.parentNode.getAttribute("data-i") === i); });
+      rows.forEach(function (r) { r.classList.toggle("is-hot", r.getAttribute("data-i") === i); });
+      if (cap) {
+        var a = svg.querySelector('a.rg-link[data-i="' + i + '"]');
+        cap.textContent = a ? a.getAttribute("data-tip") : base;
+      }
     }
-    svg.addEventListener("mouseover", function (e) {
-      var a = e.target.closest ? e.target.closest("a.rg-link") : null;
-      if (!a) return;
-      var i = a.getAttribute("data-i");
-      hot(i);
-      cap.textContent = a.getAttribute("data-tip");
-    });
-    svg.addEventListener("mouseout", function () {
-      hot(null);
-      cap.textContent = base;
-    });
+    function bind(el, attr) {
+      el.addEventListener("mouseenter", function () { hot(el.getAttribute(attr)); });
+      el.addEventListener("mouseleave", function () { hot(null); });
+    }
+    [].forEach.call(svg.querySelectorAll("a.rg-link"), function (a) { bind(a, "data-i"); });
+    rows.forEach(function (r) { bind(r, "data-i"); });
   }
 
   function build() {
@@ -417,16 +440,27 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (!card || card.getAttribute("data-graph") === "1") return;
     var pid = currentId();
     if (!pid) return;
+
     var rels = (relData()[pid] || []).slice(0, 8);
-    if (!rels.length) return;
+    var oldCard = document.querySelector(".aside-card .aside-person");
+    oldCard = oldCard ? oldCard.closest(".aside-card") : null;
+
+    if (!rels.length) {
+      card.style.display = "none";
+      return;
+    }
+    if (oldCard) oldCard.style.display = "none";
 
     var h1 = document.querySelector(".person-detail-hero h1");
     var name = h1 ? (h1.firstChild && h1.firstChild.textContent || h1.textContent || "").trim() : "";
-
     var narrow = window.innerWidth <= 900 || card.getBoundingClientRect().width < 250;
+
     card.setAttribute("data-graph", "1");
     card.className = "aside-card relation-graph";
-    card.innerHTML = narrow ? renderList(rels) : renderGraph(rels, name);
+    card.innerHTML = "<h3>人物关系图</h3>"
+      + (narrow ? "" : graphHtml(rels, name))
+      + rowsHtml(rels)
+      + '<p class="relation-caption">悬停高亮 · 点击查看人物</p>';
     wire(card);
   }
 
