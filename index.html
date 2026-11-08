@@ -62,6 +62,21 @@
 .jiangshan-embed:not(.is-ready)::after{content:"江山时序 · 载入中";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:12px/1 var(--serif);letter-spacing:.32em;color:#a08e6f;pointer-events:none;animation:atlas-loading 1.8s ease-in-out infinite}
 @keyframes atlas-loading{0%,100%{opacity:.45}50%{opacity:.95}}
 @media (prefers-reduced-motion:reduce){.jiangshan-embed:not(.is-ready)::after{animation:none;opacity:.7}}
+
+/* 事件页：时间轴脊线 + 纪元粘性标题 */
+.events-list{position:relative;padding-left:30px}
+.events-list::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:1px;background:#ded3c1}
+.event-card{position:relative}
+.event-card::before{content:"";position:absolute;left:-24px;top:44px;width:7px;height:7px;border-radius:50%;background:#f7f3eb;border:1.5px solid #a88a59;box-sizing:border-box}
+.event-card:hover::before{background:#a83f32;border-color:#a83f32}
+.event-big-year{cursor:pointer}
+.event-big-year:hover{color:#a83f32;text-decoration:underline;text-underline-offset:4px}
+.tl-century{position:sticky;top:88px;z-index:3;display:flex;align-items:center;gap:12px;margin:0 0 0 -30px;padding:16px 0 12px 30px;background:#f7f3eb;font:600 13px/1 var(--serif);letter-spacing:.2em;color:#8a6f42}
+.tl-century::before{content:"";flex:none;width:9px;height:9px;background:#f7f3eb;border:1.5px solid #a83f32;transform:rotate(45deg);margin-left:-24px}
+.tl-century::after{content:"";flex:1;height:1px;background:#e4ded2}
+@media (max-width:900px){.tl-century{top:74px;font-size:12px;margin-left:-26px;padding-left:26px}.events-list{padding-left:26px}.events-list::before{left:8px}.event-card::before{left:-21px;top:40px}}
+@media (max-width:600px){.event-card{flex-direction:column;gap:6px;padding:24px 4px}.event-big-year{width:auto;font-size:28px}.event-card::before{top:30px}}
+@media (prefers-reduced-motion:no-preference){.event-big-year{transition:color .15s ease}}
 </style>
 <style id="map-shell">
 body:has(.jiangshan-embed) .site-header{display:block}
@@ -131,6 +146,67 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
       if (j >= 0) { e.preventDefault(); (j === 0 ? input : links[j - 1]).focus(); }
     }
   });
+})();
+</script>
+<script id="timeline-enhance">
+(function () {
+  function parseYear(text) {
+    if (!text) return null;
+    var m = text.match(/(前)?\s*(-?\d{1,4})/);
+    if (!m) return null;
+    var n = parseInt(m[2], 10);
+    if (!isFinite(n) || n === 0) return null;
+    if (m[1] || n < 0) return -Math.abs(n);
+    return n;
+  }
+  function centuryOf(y) {
+    var c = Math.ceil(Math.abs(y) / 100);
+    return (y < 0 ? '前' : '') + c + '世纪';
+  }
+  function build() {
+    var lists = document.querySelectorAll('.events-list');
+    for (var i = 0; i < lists.length; i++) {
+      var list = lists[i];
+      var olds = list.querySelectorAll('.tl-century');
+      for (var k = 0; k < olds.length; k++) olds[k].remove();
+      var cards = list.querySelectorAll('.event-card');
+      var last = null;
+      for (var j = 0; j < cards.length; j++) {
+        var card = cards[j];
+        var yearEl = card.querySelector('.event-big-year');
+        if (!yearEl) continue;
+        var y = parseYear(yearEl.textContent);
+        if (y === null) continue;
+        yearEl.setAttribute('data-year', String(y));
+        var century = centuryOf(y);
+        if (century !== last) {
+          var h = document.createElement('div');
+          h.className = 'tl-century';
+          h.textContent = century;
+          list.insertBefore(h, card);
+          last = century;
+        }
+      }
+    }
+  }
+  var timer = null;
+  function schedule() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(build, 160);
+  }
+  document.addEventListener('click', function (e) {
+    var yEl = e.target.closest && e.target.closest('.event-big-year');
+    if (!yEl) return;
+    var y = yEl.getAttribute('data-year');
+    if (!y) return;
+    e.preventDefault();
+    e.stopPropagation();
+    location.hash = '/years?year=' + y;
+  }, true);
+  document.addEventListener('DOMContentLoaded', build);
+  if (document.readyState !== 'loading') build();
+  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+  window.addEventListener('hashchange', schedule);
 })();
 </script>
 </head>
