@@ -256,6 +256,22 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   window.addEventListener('hashchange', schedule);
 })();
 </script>
+<script id="ime-fix">
+(function () {
+  document.addEventListener('input', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'INPUT') return;
+    if (e.isComposing) e.stopPropagation();
+  }, true);
+  document.addEventListener('compositionend', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'INPUT') return;
+    setTimeout(function () {
+      t.dispatchEvent(new Event('input', { bubbles: true }));
+    }, 0);
+  }, true);
+})();
+</script>
 </head>
   <body>
     <div id="root"></div>
