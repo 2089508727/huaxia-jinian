@@ -149,6 +149,7 @@ html:not(.relations-ready) .aside-card.relation-placeholder,
 html:not(.relations-ready) .aside-card:has(.aside-person){visibility:hidden}
 aside .aside-card:has(.aside-person){display:none}
 .aside-card.relation-placeholder{visibility:hidden}
+html.rel-pending .reading-page aside .aside-card{visibility:hidden}
 .rel-card{visibility:visible}
 
 /* 人物关系（右栏卡片） */
@@ -501,15 +502,16 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (!card) return;
     if (card.getAttribute("data-hash") === (location.hash || "")) {
       var ol0 = [].slice.call(document.querySelectorAll("aside .aside-card")).filter(function (c) {
-        return /相关人物/.test(c.innerText || "");
+        return /相关人物/.test(c.textContent || "");
       })[0];
       if (ol0 && ol0 !== card) ol0.style.display = "none";
+      document.documentElement.classList.remove("rel-pending");
       document.documentElement.classList.add("relations-ready");
       return;
     }
 
     var oldList = [].slice.call(document.querySelectorAll("aside .aside-card")).filter(function (c) {
-      return /相关人物/.test(c.innerText);
+      return /相关人物/.test(c.textContent);
     })[0] || null;
 
     var d = data();
@@ -528,6 +530,8 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
       card.setAttribute("data-hash", location.hash || "");
       card.innerHTML = "<h3>人物关系</h3><p class=\"rel-empty\">关联资料尚在补充。人物的交往、师承与对立关系会在这里展开。</p>";
       if (oldList && oldList !== card) oldList.style.display = "none";
+      document.documentElement.classList.remove("rel-pending");
+      document.documentElement.classList.add("relations-ready");
       return;
     }
     if (oldList && oldList !== card) oldList.style.display = "none";
@@ -588,6 +592,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     });
 
     showCenter();
+    document.documentElement.classList.remove("rel-pending");
     document.documentElement.classList.add("relations-ready");
   }
 
@@ -604,9 +609,31 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (outside) schedule();
   });
   mo.observe(document.documentElement, { childList: true, subtree: true });
-  window.addEventListener("hashchange", function () { setTimeout(build, 0); });
+  function markPending() {
+    if (/#\/people\//.test(location.hash || "")) {
+      document.documentElement.classList.add("rel-pending");
+    }
+  }
+  window.addEventListener("hashchange", function () {
+    markPending();
+    setTimeout(build, 0);
+  });
+  ["pushState", "replaceState"].forEach(function (k) {
+    var orig = history[k];
+    if (!orig) return;
+    history[k] = function () {
+      var r = orig.apply(this, arguments);
+      markPending();
+      setTimeout(build, 0);
+      return r;
+    };
+  });
+  markPending();
   if (document.readyState !== "loading") build();
-  setTimeout(function () { document.documentElement.classList.add("relations-ready"); }, 1500);
+  setTimeout(function () {
+    document.documentElement.classList.remove("rel-pending");
+    document.documentElement.classList.add("relations-ready");
+  }, 1500);
 })();
 
 </script>
