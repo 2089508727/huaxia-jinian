@@ -143,6 +143,13 @@
 .relation-list .rl-item.is-hot b,.relation-list .rl-item:hover b{color:#a83f32}
 .relation-caption{color:#8a7f6d;font-size:11.5px;margin-top:8px}
 
+
+/* 人物页右栏：关系卡就绪前先隐藏，避免占位内容闪现 */
+html:not(.relations-ready) .aside-card.relation-placeholder,
+html:not(.relations-ready) .aside-card:has(.aside-person){visibility:hidden}
+aside .aside-card:has(.aside-person){display:none}
+.rel-card{visibility:visible}
+
 /* 人物关系（右栏卡片） */
 .rel-card h3{margin-bottom:2px}
 .rel-svg{display:block;width:100%;height:auto;margin:2px 0 0}
@@ -491,7 +498,14 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     var pid = currentId();
     var card = document.querySelector(".aside-card.relation-placeholder");
     if (!card) return;
-    if (card.getAttribute("data-hash") === (location.hash || "")) return;
+    if (card.getAttribute("data-hash") === (location.hash || "")) {
+      var ol0 = [].slice.call(document.querySelectorAll("aside .aside-card")).filter(function (c) {
+        return /相关人物/.test(c.innerText || "");
+      })[0];
+      if (ol0 && ol0 !== card) ol0.style.display = "none";
+      document.documentElement.classList.add("relations-ready");
+      return;
+    }
 
     var oldList = [].slice.call(document.querySelectorAll("aside .aside-card")).filter(function (c) {
       return /相关人物/.test(c.innerText);
@@ -573,6 +587,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     });
 
     showCenter();
+    document.documentElement.classList.add("relations-ready");
   }
 
   var timer = null;
@@ -590,6 +605,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   mo.observe(document.documentElement, { childList: true, subtree: true });
   window.addEventListener("hashchange", function () { setTimeout(build, 320); });
   if (document.readyState !== "loading") build();
+  setTimeout(function () { document.documentElement.classList.add("relations-ready"); }, 1500);
 })();
 
 </script>
