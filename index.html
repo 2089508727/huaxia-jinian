@@ -594,7 +594,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
   var timer = null;
   function schedule() {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(build, 180);
+    timer = setTimeout(build, 60);
   }
   var mo = new MutationObserver(function (muts) {
     var outside = muts.some(function (m) {
@@ -604,7 +604,7 @@ body:has(.jiangshan-embed) .jiangshan-embed.is-ready>iframe{opacity:1}
     if (outside) schedule();
   });
   mo.observe(document.documentElement, { childList: true, subtree: true });
-  window.addEventListener("hashchange", function () { setTimeout(build, 320); });
+  window.addEventListener("hashchange", function () { setTimeout(build, 0); });
   if (document.readyState !== "loading") build();
   setTimeout(function () { document.documentElement.classList.add("relations-ready"); }, 1500);
 })();
