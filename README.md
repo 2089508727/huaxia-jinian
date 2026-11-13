@@ -4,6 +4,28 @@
 
 **[打开网站](https://2089508727.github.io/huaxia-jinian/)** · [下载完整离线包（ZIP）](https://github.com/2089508727/huaxia-jinian/archive/refs/heads/main.zip)
 
+[![华夏纪年首页，含水墨首屏、全站搜索和时间轴入口](docs/screenshots/home.jpg)](https://2089508727.github.io/huaxia-jinian/)
+
+## 功能预览
+
+### 朝代时间轴
+
+以五代十国为例，后梁、吴越等政权按起止年代排列在不同轨道上。点击时期，时间轴和朝代目录会一起更新。[打开五代十国时间轴](https://2089508727.github.io/huaxia-jinian/#/dynasties?period=five)
+
+![五代十国时间轴中的并行政权与缩放控件](docs/screenshots/timeline.jpg)
+
+### 人物关系
+
+在曹操的人物关系图中选择刘备，可以看到两人的关系、刘备的主要事迹和相关事件。[打开曹操的人物关系图](https://2089508727.github.io/huaxia-jinian/#/people/cao-cao#profile-relations)
+
+![曹操与刘备、孙权、曹丕的关系图，右侧展示选中的刘备](docs/screenshots/person-relations.jpg)
+
+### 历史地图
+
+地图底部的时间轴可切换年份，右侧列出相关事件。下图展示 1271 年的地图与大元建号条目。[打开 1271 年地图](https://2089508727.github.io/huaxia-jinian/#/map?year=1271)
+
+![1271 年的江山时序地图，含事件列表和年份时间轴](docs/screenshots/historical-map.jpg)
+
 ## 从哪里开始
 
 | 入口 | 可以做什么 |
